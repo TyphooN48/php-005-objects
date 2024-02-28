@@ -1,10 +1,10 @@
 <?php
 // ### ПРОЦЕДУРНЫЙ МЕТОД ###
 
-$day = "16"; // день первого месяца, с которого начинаем подсчёт рабочих дней
-$month = "10";  // месяц, с которого начинаем подсчёт рабочих дней
-$year = "2014"; // год, с которого начинаем подсчёт рабочих дней
-$quantityMonths = 4;  // количество месяцев, за которые считаем рабочие дни
+$day = "01"; // день первого месяца, с которого начинаем подсчёт рабочих дней
+$month = "02";  // месяц, с которого начинаем подсчёт рабочих дней
+$year = "2024"; // год, с которого начинаем подсчёт рабочих дней
+$quantityMonths = 2;  // количество месяцев, за которые считаем рабочие дни
 
 $restPeriod = 2;  // период отдыха между рабочими днями
 
@@ -13,12 +13,13 @@ function daysOfCalendar($day, $month, $year, $quantityMonths): array { // фун
     if (    // проверка входных данных функции (кроме года)
         (int)$day <= 0 ||
         (int)$month > 12 ||
-        (int)$month <= 0
+        (int)$month <= 0 ||
+        (int)$quantityMonths <= 0
     ) {
         fwrite(STDERR,"ERROR! Incoming values out of range!\n");
         return [];
     }
-
+                                                                      
     $start_date = $day."-".$month."-".$year;
     $start_time = strtotime($start_date);
     $startMonth = date('m', $start_time);
@@ -59,6 +60,7 @@ function workDaysPrint($items, $restPeriod): void { // ФУНКЦИЯ ПЕРЕБ
         if (substr($item, -3, 3) === 'Sat' || substr($item, -3, 3) === 'Sun') // поиск выходных дней Weekend-а в общем списке
         {
             $fullElement = ((int)array_search($item, $items) + 1) . '.' . $item;
+            $periodCounter = 0;
             echo "\033[32m $fullElement \033[0m" . PHP_EOL; // выходные дни Weekend-а (помечается ЗЕЛЁНЫМ)
         } else {
             if ($periodCounter === 0) {
